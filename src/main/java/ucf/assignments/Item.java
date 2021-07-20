@@ -4,15 +4,14 @@
  */
 package ucf.assignments;
 
-import javafx.beans.property.SimpleDoubleProperty;
-import javafx.beans.property.SimpleStringProperty;
+
+import java.math.BigDecimal;
 
 public class Item {
-    SimpleStringProperty name;
-    SimpleStringProperty serialNumber;
-    SimpleDoubleProperty price;
+    private String name, serialNumber, price;
 
-    public Item(SimpleStringProperty name, SimpleStringProperty serialNumber, SimpleDoubleProperty price) {
+
+    public Item(String name, String serialNumber, String price) {
         this.name = name;
         this.serialNumber = serialNumber;
         this.price = price;
@@ -20,38 +19,30 @@ public class Item {
 
 
     public String getName() {
-        return name.get();
-    }
-
-    public SimpleStringProperty nameProperty() {
         return name;
     }
 
+
     public void setName(String name) {
-        this.name = new SimpleStringProperty(name);
+        this.name = name;
     }
 
     public String getSerialNumber() {
-        return serialNumber.get();
-    }
-
-    public SimpleStringProperty serialNumberProperty() {
         return serialNumber;
     }
 
+
     public void setSerialNumber(String serialNumber) {
-        this.serialNumber = new SimpleStringProperty(serialNumber);
+        this.serialNumber = serialNumber;
     }
 
-    public double getPrice() {
-        return price.get();
-    }
-
-    public SimpleDoubleProperty priceProperty() {
+    public String getPrice() {
         return price;
     }
 
-    public void setPrice(double price) {
-        this.price = new SimpleDoubleProperty(price);
+
+    public void setPrice(String price) {
+        BigDecimal money = BigDecimal.valueOf(Double.parseDouble(price));
+        this.price = money.toString();
     }
 }

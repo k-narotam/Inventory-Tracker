@@ -6,12 +6,6 @@ class InventoryTracker {
     main()
 }
 
-class SceneManager {
-    scenes: Map<String, Scene>
-    load()
-    getScene(String): Scene
-}
-
 class MainWindowController {
     items: ItemModel
     scenes: SceneManager
@@ -24,6 +18,17 @@ class MainWindowController {
 
 }
 
+class InventoryTrackerMethods {
+    +addItem()
+    +deleteItem()
+    +edit()
+    +search()
+    +
+
+
+}
+
+
 class FileManager {
     saveInventoryasCSV(filename: Strin, data: String)
     saveInventoryasHTML(filename: String, data: String)
@@ -31,45 +36,42 @@ class FileManager {
    }
 
 
-class AddItemWindowController {
-
-}
-
-class RemoveItemWindowController {
-}
-
-
-class SearchItemWindowController {
-}
 
 class ItemModel {
     - ObservableList<Item>
 }
 
 class Item {
+    - name: String
+    - serialNumber: String
+    - value: String
+
+    +getName()
+    +setName()
+    +getSerialNumber()
+    +setSerialNumber()
+    +getValue()
+    +setValue()
+}
+
+class SimpleItem {
     - name: SimpleStringProperty
     - serialNumber: SimpleStringProperty
     - value: SimpleDoubleProperty
 
     +getName()
     +setName()
-    +namePropety()
     +getSerialNumber()
-    ...
+    +setSerialNumber()
+    +getValue()
+    +setValue()
 }
 
 InventoryTracker -- SceneManager
 javafx.Application <|-- InventoryTracker
-SceneManager -- MainWindowController
-SceneManager -- AddItemWindowController
-SceneManager -- EditItemWindowController
-SceneManager -- RemoveItemWindowController
-SceneManager -- SearchItemWindowController
+
 MainWindowController o-- ItemModel
-AddItemWindowController o-- ItemModel
-EditItemWindowController o-- ItemModel
-RemoveItemWindowController o-- ItemModel
-SearchItemWindowController o-- ItemModel
+
 MainWindowController o-- FileManager
 ItemModel *-- Item
 @enduml
