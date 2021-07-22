@@ -14,6 +14,7 @@ import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.control.cell.TextFieldTableCell;
 
+import java.io.IOException;
 import java.net.URL;
 import java.util.ResourceBundle;
 
@@ -54,8 +55,8 @@ public class InventoryTracker implements Initializable {
     }
 
     @FXML
-    public void addNewClicked(ActionEvent actionEvent) {
-        methods.addItem(nameTextfield.getText(), serialTextField.getText(), priceTextfield.getText(), inventory);
+    public void addNewClicked(ActionEvent actionEvent) throws IOException {
+        inventory = methods.addItem(nameTextfield.getText(), serialTextField.getText(), priceTextfield.getText(), inventory);
         tableView.setItems(inventory);
     }
 }

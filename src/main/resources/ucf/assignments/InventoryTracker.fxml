@@ -43,9 +43,9 @@
     <center>
         <TableView fx:id="tableView" prefHeight="232.0" prefWidth="606.0" BorderPane.alignment="CENTER">
             <columns>
-                <TableColumn fx:id="priceColumn" prefWidth="132.0" text="Price" />
-                <TableColumn fx:id="serialColumn" prefWidth="174.0" text="Serial Number" />
-                <TableColumn fx:id="nameColumn" maxWidth="1.7976931348623157E308" prefWidth="293.0" text="Name" />
+                <TableColumn fx:id="priceColumn" prefWidth="73.0" text="Price" />
+                <TableColumn fx:id="serialColumn" prefWidth="111.0" text="Serial Number" />
+                <TableColumn fx:id="nameColumn" maxWidth="1.7976931348623157E308" prefWidth="415.0" text="Name" />
             </columns>
         </TableView>
     </center>

@@ -8,6 +8,7 @@ import javafx.beans.property.SimpleDoubleProperty;
 import javafx.beans.property.SimpleStringProperty;
 
 import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.text.NumberFormat;
 
 public class SimpleItem {
@@ -47,6 +48,8 @@ public class SimpleItem {
 
     public void setPrice(String price) {
         BigDecimal value = BigDecimal.valueOf(Double.parseDouble(price));
-        this.price = new SimpleStringProperty(value.toString());
+        value = value.setScale(2, RoundingMode.HALF_UP);
+        this.price = new SimpleStringProperty(new StringBuilder().append("$").append(value.toString()).toString());
+
     }
 }
