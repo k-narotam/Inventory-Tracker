@@ -1,6 +1,6 @@
 ## GUI Inventory Tracker Instructions
 
-###Storage
+### Storage
 Insert valid item with attributes: price, serial number, and name 
 
 (Inventory designed to store items with valid monetary input, 
@@ -9,11 +9,11 @@ unique alphanumeric serial numbers of length 10, and names between 2-256 charact
 <br/>
 Delete by selection (Edit->Delete Item)
 
-###Edit
+### Edit
 Edit cell with valid input (double click -> enter)
-###Sort
+### Sort
 Sort by price, serial number, or name (click attribute -> ascending arrow / descending arrow / default)
-###Save
+### Save
 User choice to save inventory in multiple formats (TSV, HTML, JSON)
 ###Load
 User can load inventory from file previously saved
