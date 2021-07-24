@@ -17,3 +17,4 @@ Sort by price, serial number, or name (click attribute -> ascending arrow / desc
 User choice to save inventory in multiple formats (TSV, HTML, JSON)
 ###Load
 User can load inventory from file previously saved
+
