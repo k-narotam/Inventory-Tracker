@@ -8,12 +8,12 @@ package ucf.assignments;
 import java.math.BigDecimal;
 
 public class Item {
-    private String name, serialNumber, price;
+    private String name, serial, price;
 
 
-    public Item(String name, String serialNumber, String price) {
+    public Item(String name, String serial, String price) {
         this.name = name;
-        this.serialNumber = serialNumber;
+        this.serial = serial;
         this.price = price;
     }
 
@@ -27,13 +27,13 @@ public class Item {
         this.name = name;
     }
 
-    public String getSerialNumber() {
-        return serialNumber;
+    public String getSerial() {
+        return serial;
     }
 
 
-    public void setSerialNumber(String serialNumber) {
-        this.serialNumber = serialNumber;
+    public void setSerial(String serial) {
+        this.serial = serial;
     }
 
     public String getPrice() {

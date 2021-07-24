@@ -7,6 +7,7 @@ package ucf.assignments;
 
 import javafx.scene.control.Alert;
 
+// Alerts utilized when user inputs invalid data
 public class ErrorMessage {
 
     public static void showErrorAlert(String title, String text)  {

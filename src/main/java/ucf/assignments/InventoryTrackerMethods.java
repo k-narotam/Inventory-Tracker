@@ -5,10 +5,18 @@
 package ucf.assignments;
 
 
+import com.google.gson.*;
+import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+
+import java.io.*;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.util.ArrayList;
 
 
 public class InventoryTrackerMethods {
+
 
     // Constraints: Item name between 2 - 256 characters; Serial Number in format XXXXXXXXXX alphanumeric and unique
     // Price valid monetary value
@@ -68,11 +76,91 @@ public class InventoryTrackerMethods {
         return inventory;
     }
 
-
-
     public void searchItem(String text, ObservableList inventory) {
 
     }
+
+
+
+    // Print writer used to write to tsv file
+    public void tsvFormat(ObservableList<SimpleItem> inventory,  File file) throws FileNotFoundException {
+        PrintWriter writer;
+        writer = new PrintWriter(file);
+        writer.printf("%-10s\t%-15s\t%-75s%n", "Price", "Serial Number", "Name");
+        for (SimpleItem aItem: inventory) {
+            writer.printf("%-10s\t%-15s\t%-75s%n", aItem.getPrice(), aItem.getSerialNumber(), aItem.getName());
+        }
+        writer.close();
+    }
+
+    public ObservableList<SimpleItem> tsvReader(File file) throws IOException {
+        ObservableList<SimpleItem> inventory = FXCollections.observableArrayList();
+        String data = Files.readString(file.toPath());
+        String[] items = data.split("\n");
+        for (int i = 1; i < items.length; i++) {
+            String[] attributes = items[i].split("\t");
+            SimpleItem newItem = new SimpleItem(attributes[2], attributes[1], attributes[0]);
+            inventory.add(newItem);
+
+        }
+        return inventory;
+    }
+
+
+
+
+
+    // Methods for JSON Implementation
+
+    // JSON files can become serializable with ArrayList, cannot be ObservableList
+    public String serializeInventory(ObservableList<SimpleItem> inventory) {
+        ArrayList<Item> arrayList = new ArrayList();
+        for (int i = 0; i < inventory.size(); i++) {
+            arrayList.add(new Item(inventory.get(i).getName(),inventory.get(i).getSerialNumber(), inventory.get(i).getPrice()));
+        }
+        Gson gson = new Gson();
+        String arrayJson = gson.toJson(arrayList);
+        return arrayJson;
+    }
+
+
+    // Content to method is passed from serializeInventory() in order to create json content
+    public void saveTexttoFile(String content, File file) throws FileNotFoundException {
+        PrintWriter writer;
+        writer = new PrintWriter(file);
+        writer.write("{\"Inventory\" : " + content + "}");
+        writer.close();
+    }
+
+
+    // Json deserialization from Assignment 3 exercise 44
+    public ObservableList<SimpleItem> deserialize(File file) {
+        ObservableList<SimpleItem> inventory = FXCollections.observableArrayList();
+        try {
+            JsonElement fileElement = JsonParser.parseReader(new FileReader(file));
+            JsonObject fileObject = fileElement.getAsJsonObject();
+
+            // process products
+            JsonArray jsonArrayProducts = fileObject.get("Inventory").getAsJsonArray();
+
+            for (JsonElement productElement : jsonArrayProducts) {
+                JsonObject productJsonObject = productElement.getAsJsonObject();
+                // extract data
+                String serial = productJsonObject.get("serial").getAsString();
+                String name = productJsonObject.get("name").getAsString();
+                String price = productJsonObject.get("price").getAsString();
+
+                SimpleItem newItem = new SimpleItem(name, serial, price);
+                inventory.add(newItem);
+            }
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return inventory;
+    }
+
 
 
 }

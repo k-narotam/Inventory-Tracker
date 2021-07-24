@@ -12,48 +12,58 @@
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
 
-<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="606.0" xmlns="http://javafx.com/javafx/16" xmlns:fx="http://javafx.com/fxml/1" fx:controller="ucf.assignments.InventoryTracker">
+<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="500.0" prefWidth="706.0" xmlns="http://javafx.com/javafx/16" xmlns:fx="http://javafx.com/fxml/1" fx:controller="ucf.assignments.InventoryTracker">
     <top>
-        <MenuBar fx:id="listMenu" prefHeight="20.0" prefWidth="606.0" BorderPane.alignment="CENTER">
+        <MenuBar fx:id="listMenu" prefHeight="0.0" prefWidth="606.0" BorderPane.alignment="CENTER">
             <menus>
-                <Menu mnemonicParsing="false" text="File">
+                <Menu mnemonicParsing="false" text="Save">
                     <items>
-                        <Menu mnemonicParsing="false" text="New">
-                            <items>
-                                <MenuItem mnemonicParsing="false" text="Action 1" />
-                            </items>
-                        </Menu>
-                        <MenuItem mnemonicParsing="false" text="Save As..." />
-                        <MenuItem mnemonicParsing="false" text="Load..." />
+                  <MenuItem fx:id="TSVSaveButton" mnemonicParsing="false" onAction="#saveTSV" text="TSV" />
+                  <MenuItem fx:id="HTMLSaveButton" mnemonicParsing="false" onAction="#saveHTML" text="HTML" />
+                  <MenuItem fx:id="JSONSaveButton" mnemonicParsing="false" onAction="#saveJSON" text="JSON" />
                     </items>
                 </Menu>
+            <Menu mnemonicParsing="false" text="Load">
+              <items>
+                <MenuItem fx:id="TSVLoadButton" mnemonicParsing="false" onAction="#loadTSV" text="TSV" />
+                  <MenuItem fx:id="HTMLLoadButton" mnemonicParsing="false" onAction="#loadHTML" text="HTML" />
+                  <MenuItem fx:id="JSONLoadButton" mnemonicParsing="false" onAction="#loadJSON" text="JSON" />
+              </items>
+            </Menu>
                 <Menu mnemonicParsing="false" text="Edit">
                     <items>
-                        <MenuItem mnemonicParsing="false" onAction="#deleteSelectedClicked" text="Delete Selected Item" />
+                        <MenuItem mnemonicParsing="false" onAction="#deleteSelectedClicked" text="Delete Item" />
                     </items>
                 </Menu>
             </menus>
         </MenuBar>
     </top>
     <center>
-        <TableView fx:id="tableView" prefHeight="232.0" prefWidth="606.0" BorderPane.alignment="CENTER">
+        <TableView fx:id="tableView" prefHeight="292.0" prefWidth="606.0" BorderPane.alignment="CENTER">
             <columns>
-                <TableColumn fx:id="priceColumn" onEditCommit="#changePriceCellEvent" prefWidth="95.0" text="Price" />
-                <TableColumn fx:id="serialColumn" onEditCommit="#changeSerialCellEvent" prefWidth="89.0" text="Serial Number" />
-                <TableColumn fx:id="nameColumn" maxWidth="1.7976931348623157E308" onEditCommit="#changeNameCellEvent" prefWidth="415.0" text="Name" />
+                <TableColumn fx:id="priceColumn" onEditCommit="#changePriceCellEvent" prefWidth="114.0" text="Price" />
+                <TableColumn fx:id="serialColumn" onEditCommit="#changeSerialCellEvent" prefWidth="114.0" text="Serial Number" />
+                <TableColumn fx:id="nameColumn" maxWidth="1.7976931348623157E308" onEditCommit="#changeNameCellEvent" prefWidth="371.0" text="Name" />
             </columns>
         </TableView>
     </center>
     <bottom>
         <VBox prefHeight="65.0" prefWidth="606.0" BorderPane.alignment="CENTER">
             <children>
-                <HBox prefHeight="45.0" prefWidth="606.0" spacing="10.0">
+            <VBox prefHeight="53.0" prefWidth="706.0">
+               <children>
+                  <TextField fx:id="searchField" prefHeight="26.0" prefWidth="689.0" promptText="Search" />
+               </children>
+               <VBox.margin>
+                  <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
+               </VBox.margin>
+            </VBox>
+                <HBox prefHeight="24.0" prefWidth="706.0" spacing="10.0">
                     <children>
-                        <TextField fx:id="priceTextfield" promptText="Price" />
-                        <TextField fx:id="serialTextField" prefHeight="26.0" prefWidth="137.0" promptText="Serial Number" />
-                        <TextField fx:id="nameTextfield" prefHeight="26.0" prefWidth="107.0" promptText="Name" />
+                        <TextField fx:id="priceTextfield" prefHeight="26.0" prefWidth="138.0" promptText="Price" />
+                        <TextField fx:id="serialTextField" prefHeight="26.0" prefWidth="218.0" promptText="Serial Number" />
+                        <TextField fx:id="nameTextfield" prefHeight="26.0" prefWidth="250.0" promptText="Name" />
                         <Button mnemonicParsing="false" onAction="#addNewClicked" prefHeight="26.0" prefWidth="54.0" text="Add " />
-                  <Button mnemonicParsing="false" prefHeight="26.0" prefWidth="60.0" text="Search" />
                     </children>
                     <VBox.margin>
                         <Insets />

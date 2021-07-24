@@ -9,6 +9,7 @@ import java.util.ArrayList;
 
 // Testable functions - Use of ArrayList and Item instead of ObservableArrayList and SimpleItem designed for javafx
 // Duplicate logical code of InventoryTrackerMethods
+// (Program modeled similarly to Assignment 4 Structure)
 
 public class InventoryTrackerTestMethods {
 
@@ -51,7 +52,7 @@ public class InventoryTrackerTestMethods {
 
     public Boolean checkSerialUnique(String serial, ArrayList<Item> inventory) {
         for (int i = 0; i < inventory.size(); i++) {
-            if (inventory.get(i).getSerialNumber().equals(serial)) {
+            if (inventory.get(i).getSerial().equals(serial)) {
                 return false;
             }
         }

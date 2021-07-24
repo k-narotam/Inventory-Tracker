@@ -10,11 +10,11 @@ import java.math.BigDecimal;
 import java.math.RoundingMode;
 
 public class SimpleItem {
-    private SimpleStringProperty name, serialNumber, price;
+    private SimpleStringProperty name, serial, price;
 
-    public SimpleItem(String name, String serialNumber, String price) {
+    public SimpleItem(String name, String serial, String price) {
         this.name = new SimpleStringProperty(name);
-        this.serialNumber = new SimpleStringProperty(serialNumber);
+        this.serial = new SimpleStringProperty(serial);
         this.price = new SimpleStringProperty(price);
     }
 
@@ -28,15 +28,15 @@ public class SimpleItem {
     }
 
     public String getSerialNumber() {
-        return serialNumber.get();
+        return serial.get();
     }
 
     public SimpleStringProperty serialNumberProperty() {
-        return serialNumber;
+        return serial;
     }
 
-    public void setSerialNumber(String serialNumber) {
-        this.serialNumber = new SimpleStringProperty(serialNumber);
+    public void setSerialNumber(String serial) {
+        this.serial = new SimpleStringProperty(serial);
     }
 
     public String getPrice() {

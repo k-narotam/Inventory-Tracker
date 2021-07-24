@@ -74,9 +74,9 @@ class InventoryTrackerTestMethodsTest {
 
 
         if  (format && unique)
-            cellSelected.setSerialNumber(newSerial);
+            cellSelected.setSerial(newSerial);
 
-        assert(cellSelected.getSerialNumber().equals(newSerial));
+        assert(cellSelected.getSerial().equals(newSerial));
     }
 
     @DisplayName("Edit serial number, duplicate, correct format")
@@ -93,9 +93,9 @@ class InventoryTrackerTestMethodsTest {
         boolean unique = newMethods.checkSerialUnique(newSerial, inventory);
 
         if  (format && unique)
-            cellSelected.setSerialNumber(newSerial);
+            cellSelected.setSerial(newSerial);
 
-        assert(!cellSelected.getSerialNumber().equals(newSerial));
+        assert(!cellSelected.getSerial().equals(newSerial));
 
     }
 
@@ -113,9 +113,9 @@ class InventoryTrackerTestMethodsTest {
         boolean unique = newMethods.checkSerialUnique(newSerial, inventory);
 
         if  (format && unique)
-            cellSelected.setSerialNumber(newSerial);
+            cellSelected.setSerial(newSerial);
 
-        assert(!cellSelected.getSerialNumber().equals(newSerial));
+        assert(!cellSelected.getSerial().equals(newSerial));
 
     }
 
