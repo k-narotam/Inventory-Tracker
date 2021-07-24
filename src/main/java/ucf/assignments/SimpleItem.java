@@ -4,12 +4,10 @@
  */
 package ucf.assignments;
 
-import javafx.beans.property.SimpleDoubleProperty;
 import javafx.beans.property.SimpleStringProperty;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
-import java.text.NumberFormat;
 
 public class SimpleItem {
     private SimpleStringProperty name, serialNumber, price;
@@ -49,7 +47,7 @@ public class SimpleItem {
     public void setPrice(String price) {
         BigDecimal value = BigDecimal.valueOf(Double.parseDouble(price));
         value = value.setScale(2, RoundingMode.HALF_UP);
-        this.price = new SimpleStringProperty(new StringBuilder().append("$").append(value.toString()).toString());
+        this.price = new SimpleStringProperty("$" + value);
 
     }
 }
