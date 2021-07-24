@@ -9,6 +9,7 @@ import org.junit.jupiter.api.Test;
 import java.util.ArrayList;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
+// Test Methods utilizing classes with ArrayLists and Item objects
 
 class InventoryTrackerTestMethodsTest {
 

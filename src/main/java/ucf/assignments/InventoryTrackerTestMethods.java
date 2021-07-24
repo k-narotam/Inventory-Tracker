@@ -11,7 +11,7 @@ import java.util.ArrayList;
 // Duplicate logical code of InventoryTrackerMethods
 
 public class InventoryTrackerTestMethods {
-    InventoryTrackerMethods methods = new InventoryTrackerMethods();
+
     public ArrayList<Item> addItem(String name, String serial, String price, ArrayList<Item> inventory) {
         Item newItem = new Item(name, serial, price);
         if (!checkPrice(price, newItem)) {
@@ -64,8 +64,6 @@ public class InventoryTrackerTestMethods {
         }
         return false;
     }
-
-
 
     public ArrayList<Item> deleteItem(Item selected, ArrayList<Item> inventory) {
         inventory.remove(selected);
