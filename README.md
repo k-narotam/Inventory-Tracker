@@ -2,7 +2,7 @@
 
 ###Storage
 Insert valid item with attributes: price, serial number, and name 
-<br/>
+
 (Inventory designed to store items with valid monetary input, 
 unique alphanumeric serial numbers of length 10, and names between 2-256 characters)
 <br/>
