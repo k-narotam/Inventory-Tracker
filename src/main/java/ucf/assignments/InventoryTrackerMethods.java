@@ -4,14 +4,16 @@
  */
 package ucf.assignments;
 
-
 import com.google.gson.*;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import org.jsoup.Jsoup;
+import org.jsoup.nodes.Document;
+import org.jsoup.nodes.Element;
+import org.jsoup.select.Elements;
 
 import java.io.*;
 import java.nio.file.Files;
-import java.nio.file.Path;
 import java.util.ArrayList;
 
 
@@ -24,21 +26,18 @@ public class InventoryTrackerMethods {
         SimpleItem newItem = new SimpleItem(name, serial, price);
         if (!checkPrice(price, newItem)) {
             ErrorMessage.showErrorAlert("Invalid Input", "Please enter a value in US dollars");
-        }
-        else if (!checkName(name)) {
+        } else if (!checkName(name)) {
             ErrorMessage.showErrorAlert("Invalid Input", "Please enter name within 2-256 characters");
-        }
-        else if (!checkSerialUnique(serial, inventory)) {
+        } else if (!checkSerialUnique(serial, inventory)) {
             ErrorMessage.showErrorAlert("Invalid Input", "Please enter a unique serial number");
-        }
-        else if (!checkSerialFormatting(serial)) {
+        } else if (!checkSerialFormatting(serial)) {
             ErrorMessage.showErrorAlert("Invalid Input", "Please enter alphanumeric serial number with 10 characters");
-        }
-        else {
+        } else {
             inventory.add(newItem);
         }
         return inventory;
     }
+
     public Boolean checkPrice(String price, SimpleItem newItem) {
         try {
             newItem.setPrice(price);
@@ -48,6 +47,7 @@ public class InventoryTrackerMethods {
         }
         return true;
     }
+
     public Boolean checkName(String name) {
         if (name.length() >= 2 && name.length() <= 256) {
             return true;
@@ -81,13 +81,11 @@ public class InventoryTrackerMethods {
     }
 
 
-
     // Print writer used to write to tsv file
-    public void tsvFormat(ObservableList<SimpleItem> inventory,  File file) throws FileNotFoundException {
-        PrintWriter writer;
-        writer = new PrintWriter(file);
+    public void tsvFormat(ObservableList<SimpleItem> inventory, File file) throws FileNotFoundException {
+        PrintWriter writer = new PrintWriter(file);
         writer.printf("%-10s\t%-15s\t%-75s%n", "Price", "Serial Number", "Name");
-        for (SimpleItem aItem: inventory) {
+        for (SimpleItem aItem : inventory) {
             writer.printf("%-10s\t%-15s\t%-75s%n", aItem.getPrice(), aItem.getSerialNumber(), aItem.getName());
         }
         writer.close();
@@ -101,13 +99,51 @@ public class InventoryTrackerMethods {
             String[] attributes = items[i].split("\t");
             SimpleItem newItem = new SimpleItem(attributes[2], attributes[1], attributes[0]);
             inventory.add(newItem);
-
         }
         return inventory;
     }
 
+    public void HTMLFormat(ObservableList<SimpleItem> inventory, File file) throws FileNotFoundException {
+        PrintWriter writer = new PrintWriter(file);
+        writer.println("<style>\ntable, th, td {\n\tborder: 1px solid black;\n\tborder-collapse: collapse;" +
+                "\n}\nth, td {\n\tpadding: 15px;\n text-align: left;\n }\n</style>");
+        writer.println("<table style=\"width:100%\">");
+        writer.println("<tr>");
+        writer.println("\t<th>Price</th>");
+        writer.println("\t<th>Serial Number</th>");
+        writer.println("\t<th>Name</th>");
+        writer.println("</tr>");
 
+        for (SimpleItem item : inventory) {
+            writer.println("<tr>");
+            writer.printf("\t<td>%s</th>\n", item.getPrice());
+            writer.printf("\t<td>%s</th>\n", item.getSerialNumber());
+            writer.printf("\t<td>%s</th>\n", item.getName());
+            writer.println("</tr>");
+        }
+        writer.println("</table>");
+        writer.close();
+    }
 
+    // JSOUP utilized to parse HTML Table
+    public ObservableList<SimpleItem> readHTML(File file) throws IOException {
+        ObservableList<SimpleItem> inventory = FXCollections.observableArrayList();
+        String data = Files.readString(file.toPath());
+        Document doc = Jsoup.parse(data);
+
+        Element table = doc.select("table").get(0);
+        Elements rows = table.select("tr");
+        for (int i = 1; i < rows.size(); i++) {
+            Element row = rows.get(i);
+            Elements cols = row.select("td");
+            String price = cols.get(0).text();
+            String serial = cols.get(1).text();
+            String name =cols.get(2).text();
+            SimpleItem newItem = new SimpleItem(name, serial, price);
+            inventory.add(newItem);
+        }
+        return inventory;
+    }
 
 
     // Methods for JSON Implementation
@@ -116,7 +152,7 @@ public class InventoryTrackerMethods {
     public String serializeInventory(ObservableList<SimpleItem> inventory) {
         ArrayList<Item> arrayList = new ArrayList();
         for (int i = 0; i < inventory.size(); i++) {
-            arrayList.add(new Item(inventory.get(i).getName(),inventory.get(i).getSerialNumber(), inventory.get(i).getPrice()));
+            arrayList.add(new Item(inventory.get(i).getName(), inventory.get(i).getSerialNumber(), inventory.get(i).getPrice()));
         }
         Gson gson = new Gson();
         String arrayJson = gson.toJson(arrayList);
@@ -160,7 +196,6 @@ public class InventoryTrackerMethods {
         }
         return inventory;
     }
-
 
 
 }

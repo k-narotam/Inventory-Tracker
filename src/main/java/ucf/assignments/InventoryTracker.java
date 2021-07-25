@@ -138,7 +138,7 @@ public class InventoryTracker implements Initializable {
         // Ensure file extension
     }
 
-    public void saveHTML(ActionEvent actionEvent) {
+    public void saveHTML(ActionEvent actionEvent) throws FileNotFoundException {
         // File Chooser
         Stage stage = (Stage)listMenu.getScene().getWindow();
         FileChooser fileChooser = new FileChooser();
@@ -147,7 +147,7 @@ public class InventoryTracker implements Initializable {
         fileChooser.getExtensionFilters().add(extension);
         File theFile = fileChooser.showSaveDialog(stage);
 
-        // Ensure file extension
+        methods.HTMLFormat(inventory, theFile);
     }
 
     public void saveJSON(ActionEvent actionEvent) throws FileNotFoundException {
@@ -181,7 +181,7 @@ public class InventoryTracker implements Initializable {
 
     }
 
-    public void loadHTML(ActionEvent actionEvent) {
+    public void loadHTML(ActionEvent actionEvent) throws IOException {
         Stage stage = (Stage)listMenu.getScene().getWindow();
         FileChooser fileChooser = new FileChooser();
         fileChooser.setTitle("Load HTML File");
@@ -190,9 +190,14 @@ public class InventoryTracker implements Initializable {
         FileChooser.ExtensionFilter extension = new FileChooser.ExtensionFilter("HTML File", "*.html");
         fileChooser.getExtensionFilters().add(extension);
         File theFile = fileChooser.showOpenDialog(stage);
+
+        inventory = methods.readHTML(theFile);
+        tableView.setItems(inventory);
+        tableView.refresh();
+
     }
 
-    public void loadJSON(ActionEvent actionEvent) throws FileNotFoundException {
+    public void loadJSON(ActionEvent actionEvent)  {
         // parse function from InventoryTrackerMethods
         // File Chooser
         Stage stage = (Stage)listMenu.getScene().getWindow();
