@@ -213,8 +213,7 @@ class InventoryTrackerTestMethodsTest {
         list.add(item3);
         File file = File.createTempFile("tsvTest", ".tsv");
         newMethods.tsvFormat(list, file);
-        String data = Files.readString(file.toPath());
-        String actual = data;
+        String actual = Files.readString(file.toPath());
         String expected = String.format("%-10s\t%-15s\t%-75s%n", "Price", "Serial Number", "Name");
         expected += String.format("%-10s\t%-15s\t%-75s%n", item1.getPrice(), item1.getSerial(), item1.getName());
         expected += String.format("%-10s\t%-15s\t%-75s%n", item2.getPrice(), item2.getSerial(), item2.getName());
@@ -248,7 +247,7 @@ class InventoryTrackerTestMethodsTest {
            else if (!loadedList.get(i).getPrice().strip().equals(list.get(i).getPrice()))
                sameData = false;
         }
-        assert(sameData == true);
+        assert(sameData);
         file.delete();
     }
 
@@ -265,40 +264,41 @@ class InventoryTrackerTestMethodsTest {
         list.add(item3);
         File file = File.createTempFile("saveHTML", ".html");
         newMethods.HTMLFormat(list, file);
-        String data = Files.readString(file.toPath());
-        String actual = data;
-        String expected = "<style>\n" +
-                "table, th, td {\n" +
-                "\tborder: 1px solid black;\n" +
-                "\tborder-collapse: collapse;\n" +
-                "}\n" +
-                "th, td {\n" +
-                "\tpadding: 15px;\n" +
-                " text-align: left;\n" +
-                " }\n" +
-                "</style>\n" +
-                "<table style=\"width:100%\">\n" +
-                "<tr>\n" +
-                "\t<th>Price</th>\n" +
-                "\t<th>Serial Number</th>\n" +
-                "\t<th>Name</th>\n" +
-                "</tr>\n" +
-                "<tr>\n" +
-                "\t<td>500</th>\n" +
-                "\t<td>0123456789</th>\n" +
-                "\t<td>iPad</th>\n" +
-                "</tr>\n" +
-                "<tr>\n" +
-                "\t<td>2000</th>\n" +
-                "\t<td>1234567890</th>\n" +
-                "\t<td>macbook</th>\n" +
-                "</tr>\n" +
-                "<tr>\n" +
-                "\t<td>100</th>\n" +
-                "\t<td>2345678901</th>\n" +
-                "\t<td>Apple Pencil</th>\n" +
-                "</tr>\n" +
-                "</table>\n";
+        String actual = Files.readString(file.toPath());
+        String expected = """
+                <style>
+                table, th, td {
+                \tborder: 1px solid black;
+                \tborder-collapse: collapse;
+                }
+                th, td {
+                \tpadding: 15px;
+                 text-align: left;
+                 }
+                </style>
+                <table style="width:100%">
+                <tr>
+                \t<th>Price</th>
+                \t<th>Serial Number</th>
+                \t<th>Name</th>
+                </tr>
+                <tr>
+                \t<td>500</th>
+                \t<td>0123456789</th>
+                \t<td>iPad</th>
+                </tr>
+                <tr>
+                \t<td>2000</th>
+                \t<td>1234567890</th>
+                \t<td>macbook</th>
+                </tr>
+                <tr>
+                \t<td>100</th>
+                \t<td>2345678901</th>
+                \t<td>Apple Pencil</th>
+                </tr>
+                </table>
+                """;
         assertEquals(expected, actual);
         file.delete();
     }
@@ -327,7 +327,7 @@ class InventoryTrackerTestMethodsTest {
             else if (!loadedList.get(i).getPrice().strip().equals(list.get(i).getPrice()))
                 sameData = false;
         }
-        assert(sameData == true);
+        assert(sameData);
         file.delete();
     }
 
@@ -343,8 +343,7 @@ class InventoryTrackerTestMethodsTest {
         File file = File.createTempFile("jsonSave", ".json");
         String jsonString = newMethods.serializeInventory(list);
         newMethods.saveTexttoFile(jsonString, file);
-        String data = Files.readString(file.toPath());
-        String actual = data;
+        String actual = Files.readString(file.toPath());
         String expected = "{\"Inventory\" : [{\"name\":\"iPad\",\"serial\":\"0123456789\",\"price\":\"500\"},{\"name\":\"macbook\",\"serial\":\"1234567890\",\"price\":\"2000\"}]}";
         assertEquals(expected, actual);
         file.delete();
@@ -373,7 +372,7 @@ class InventoryTrackerTestMethodsTest {
             else if (!loadedList.get(i).getPrice().strip().equals(list.get(i).getPrice()))
                 sameData = false;
         }
-        assert(sameData == true);
+        assert(sameData);
         file.delete();
     }
 

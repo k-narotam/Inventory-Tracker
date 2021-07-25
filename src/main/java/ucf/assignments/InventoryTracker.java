@@ -119,11 +119,12 @@ public class InventoryTracker implements Initializable {
     }
 
     @FXML
-    public void addNewClicked(ActionEvent actionEvent) throws IOException {
+    public void addNewClicked(ActionEvent actionEvent) {
         inventory = methods.addItem(nameTextfield.getText(), serialTextField.getText(), priceTextfield.getText(), inventory);
         tableView.setItems(inventory);
     }
 
+    @FXML
     public void saveTSV(ActionEvent actionEvent) throws FileNotFoundException {
         // File Chooser
         Stage stage = (Stage)listMenu.getScene().getWindow();
@@ -137,6 +138,7 @@ public class InventoryTracker implements Initializable {
         // Ensure file extension
     }
 
+    @FXML
     public void saveHTML(ActionEvent actionEvent) throws FileNotFoundException {
         // File Chooser
         Stage stage = (Stage)listMenu.getScene().getWindow();
@@ -149,6 +151,7 @@ public class InventoryTracker implements Initializable {
         methods.HTMLFormat(inventory, theFile);
     }
 
+    @FXML
     public void saveJSON(ActionEvent actionEvent) throws FileNotFoundException {
         // File Chooser
         Stage stage = (Stage)listMenu.getScene().getWindow();
@@ -165,6 +168,7 @@ public class InventoryTracker implements Initializable {
         methods.saveTexttoFile(jsonString, theFile);
     }
 
+    @FXML
     public void loadTSV(ActionEvent actionEvent) throws IOException {
         Stage stage = (Stage)listMenu.getScene().getWindow();
         FileChooser fileChooser = new FileChooser();
@@ -180,6 +184,7 @@ public class InventoryTracker implements Initializable {
 
     }
 
+    @FXML
     public void loadHTML(ActionEvent actionEvent) throws IOException {
         Stage stage = (Stage)listMenu.getScene().getWindow();
         FileChooser fileChooser = new FileChooser();
@@ -196,6 +201,7 @@ public class InventoryTracker implements Initializable {
 
     }
 
+    @FXML
     public void loadJSON(ActionEvent actionEvent)  {
         // parse function from InventoryTrackerMethods
         // File Chooser

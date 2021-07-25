@@ -52,15 +52,12 @@ public class InventoryTrackerMethods {
     }
 
     public Boolean checkName(String name) {
-        if (name.length() >= 2 && name.length() <= 256) {
-            return true;
-        }
-        return false;
+        return name.length() >= 2 && name.length() <= 256;
     }
 
     public Boolean checkSerialUnique(String serial, ObservableList<SimpleItem> inventory) {
-        for (int i = 0; i < inventory.size(); i++) {
-            if (inventory.get(i).getSerialNumber().equals(serial)) {
+        for (SimpleItem simpleItem : inventory) {
+            if (simpleItem.getSerialNumber().equals(serial)) {
                 return false;
             }
         }
@@ -68,10 +65,7 @@ public class InventoryTrackerMethods {
     }
 
     public Boolean checkSerialFormatting(String serial) {
-        if (serial.matches("[a-zA-Z0-9]+") && serial.length() == 10) {
-            return true;
-        }
-        return false;
+        return serial.matches("[a-zA-Z0-9]+") && serial.length() == 10;
     }
 
     public ObservableList<SimpleItem> deleteItem(SimpleItem selected, ObservableList<SimpleItem> inventory) {
@@ -79,7 +73,7 @@ public class InventoryTrackerMethods {
         return inventory;
     }
 
-    public void searchItem(String text, ObservableList inventory) {
+    public void searchItem(String text, ObservableList<SimpleItem> inventory) {
 
     }
 
@@ -108,8 +102,17 @@ public class InventoryTrackerMethods {
 
     public void HTMLFormat(ObservableList<SimpleItem> inventory, File file) throws FileNotFoundException {
         PrintWriter writer = new PrintWriter(file);
-        writer.println("<style>\ntable, th, td {\n\tborder: 1px solid black;\n\tborder-collapse: collapse;" +
-                "\n}\nth, td {\n\tpadding: 15px;\n text-align: left;\n }\n</style>");
+        writer.println("""
+                <style>
+                table, th, td {
+                \tborder: 1px solid black;
+                \tborder-collapse: collapse;
+                }
+                th, td {
+                \tpadding: 15px;
+                 text-align: left;
+                 }
+                </style>""");
         writer.println("<table style=\"width:100%\">");
         writer.println("<tr>");
         writer.println("\t<th>Price</th>");
@@ -153,13 +156,12 @@ public class InventoryTrackerMethods {
 
     // JSON files can become serializable with ArrayList, cannot be ObservableList
     public String serializeInventory(ObservableList<SimpleItem> inventory) {
-        ArrayList<Item> arrayList = new ArrayList();
-        for (int i = 0; i < inventory.size(); i++) {
-            arrayList.add(new Item(inventory.get(i).getName(), inventory.get(i).getSerialNumber(), inventory.get(i).getPrice()));
+        ArrayList<Item> arrayList = new ArrayList<>();
+        for (SimpleItem simpleItem : inventory) {
+            arrayList.add(new Item(simpleItem.getName(), simpleItem.getSerialNumber(), simpleItem.getPrice()));
         }
         Gson gson = new Gson();
-        String arrayJson = gson.toJson(arrayList);
-        return arrayJson;
+        return gson.toJson(arrayList);
     }
 
 
@@ -192,8 +194,6 @@ public class InventoryTrackerMethods {
                 SimpleItem newItem = new SimpleItem(name, serial, price);
                 inventory.add(newItem);
             }
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
         } catch (Exception e) {
             e.printStackTrace();
         }

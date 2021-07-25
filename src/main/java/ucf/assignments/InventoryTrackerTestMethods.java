@@ -6,7 +6,6 @@
 package ucf.assignments;
 
 import com.google.gson.*;
-import javafx.collections.FXCollections;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
@@ -43,10 +42,7 @@ public class InventoryTrackerTestMethods {
     }
 
     public Boolean checkName(String name) {
-        if (name.length() >= 2 && name.length() <= 256) {
-            return true;
-        }
-        return false;
+        return name.length() >= 2 && name.length() <= 256;
     }
 
     public Boolean checkPrice(String price, Item newItem) {
@@ -60,8 +56,8 @@ public class InventoryTrackerTestMethods {
     }
 
     public Boolean checkSerialUnique(String serial, ArrayList<Item> inventory) {
-        for (int i = 0; i < inventory.size(); i++) {
-            if (inventory.get(i).getSerial().equals(serial)) {
+        for (Item item : inventory) {
+            if (item.getSerial().equals(serial)) {
                 return false;
             }
         }
@@ -69,10 +65,7 @@ public class InventoryTrackerTestMethods {
     }
 
     public Boolean checkSerialFormatting(String serial) {
-        if (serial.matches("[a-zA-Z0-9]+") && serial.length() == 10) {
-            return true;
-        }
-        return false;
+        return serial.matches("[a-zA-Z0-9]+") && serial.length() == 10;
     }
 
     public ArrayList<Item> deleteItem(Item selected, ArrayList<Item> inventory) {
@@ -103,8 +96,17 @@ public class InventoryTrackerTestMethods {
 
     public void HTMLFormat(ArrayList<Item> inventory, File file) throws FileNotFoundException {
         PrintWriter writer = new PrintWriter(file);
-        writer.println("<style>\ntable, th, td {\n\tborder: 1px solid black;\n\tborder-collapse: collapse;" +
-                "\n}\nth, td {\n\tpadding: 15px;\n text-align: left;\n }\n</style>");
+        writer.println("""
+                <style>
+                table, th, td {
+                \tborder: 1px solid black;
+                \tborder-collapse: collapse;
+                }
+                th, td {
+                \tpadding: 15px;
+                 text-align: left;
+                 }
+                </style>""");
         writer.println("<table style=\"width:100%\">");
         writer.println("<tr>");
         writer.println("\t<th>Price</th>");
@@ -143,13 +145,12 @@ public class InventoryTrackerTestMethods {
     }
 
     public String serializeInventory(ArrayList<Item> inventory) {
-        ArrayList<Item> arrayList = new ArrayList();
-        for (int i = 0; i < inventory.size(); i++) {
-            arrayList.add(new Item(inventory.get(i).getName(), inventory.get(i).getSerial(), inventory.get(i).getPrice()));
+        ArrayList<Item> arrayList = new ArrayList<>();
+        for (Item item : inventory) {
+            arrayList.add(new Item(item.getName(), item.getSerial(), item.getPrice()));
         }
         Gson gson = new Gson();
-        String arrayJson = gson.toJson(arrayList);
-        return arrayJson;
+        return gson.toJson(arrayList);
     }
 
     public void saveTexttoFile(String content, File file) throws FileNotFoundException {
@@ -178,8 +179,6 @@ public class InventoryTrackerTestMethods {
                 Item newItem = new Item(name, serial, price);
                 inventory.add(newItem);
             }
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
         } catch (Exception e) {
             e.printStackTrace();
         }
