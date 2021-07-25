@@ -6,12 +6,18 @@ package ucf.assignments;
 
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+
+import java.io.File;
+import java.io.IOException;
+import java.nio.file.Files;
 import java.util.ArrayList;
+
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 // Test Methods utilizing classes with ArrayLists and Item objects
 
 class InventoryTrackerTestMethodsTest {
+
 
     @DisplayName("Simple Test of addItem")
     @Test
@@ -43,6 +49,25 @@ class InventoryTrackerTestMethodsTest {
         newMethods.addItem("i", "0123456789", "1000", list);
 
         assert(list.size() == 3);
+    }
+
+    // Uses random number generator in order to create 100 unique serial numbers
+    @DisplayName("Store 100 items")
+    @Test
+    void store100() {
+        InventoryTrackerTestMethods newMethods = new InventoryTrackerTestMethods();
+        String alphaNumericString = "ABCDEFGHIJKLMNOPQRSTUVWXYZ" + "0123456789" + "abcdefghijklmnopqrstuwxyz";
+        ArrayList<Item> list = new ArrayList<>();
+        for (int i = 0; i < 100; i++) {
+            StringBuilder newString = new StringBuilder(10);
+            for (int j = 0; j < 10; j++) {
+                int index = (int)(alphaNumericString.length()*Math.random());
+                newString.append((alphaNumericString.charAt(index)));
+            }
+            String serialNum = newString.toString();
+            newMethods.addItem("name", serialNum, "1", list);
+        }
+        assert(list.size() == 100);
     }
 
     @DisplayName("Simple Delete Item Test")
@@ -156,7 +181,7 @@ class InventoryTrackerTestMethodsTest {
         inventory.add(item1);
         Item cellSelected = new Item("item2", "XXXXXXXXXX", "3");
         inventory.add(cellSelected);
-        String newName = "karina";
+        String newName = "name";
         assert (newMethods.checkName(newName));
 
     }
@@ -174,5 +199,185 @@ class InventoryTrackerTestMethodsTest {
         assert (!newMethods.checkName(newName));
 
     }
+
+    @DisplayName("Test TSV Save")
+    @Test
+    void saveTSVTest() throws IOException {
+        InventoryTrackerTestMethods newMethods = new InventoryTrackerTestMethods();
+        ArrayList<Item> list = new ArrayList<>();
+        Item item1 = new Item("iPad", "0123456789", "500");
+        Item item2 = new Item("macbook", "1234567890", "2000");
+        Item item3 = new Item("Apple Pencil", "2345678901", "100");
+        list.add(item1);
+        list.add(item2);
+        list.add(item3);
+        File file = File.createTempFile("tsvTest", ".tsv");
+        newMethods.tsvFormat(list, file);
+        String data = Files.readString(file.toPath());
+        String actual = data;
+        String expected = String.format("%-10s\t%-15s\t%-75s%n", "Price", "Serial Number", "Name");
+        expected += String.format("%-10s\t%-15s\t%-75s%n", item1.getPrice(), item1.getSerial(), item1.getName());
+        expected += String.format("%-10s\t%-15s\t%-75s%n", item2.getPrice(), item2.getSerial(), item2.getName());
+        expected += String.format("%-10s\t%-15s\t%-75s%n", item3.getPrice(), item3.getSerial(), item3.getName());
+        assertEquals(expected, actual);
+        file.delete();
+
+    }
+
+    @DisplayName("Test TSV Load")
+    @Test
+    void loadTSVTest() throws IOException {
+        InventoryTrackerTestMethods newMethods = new InventoryTrackerTestMethods();
+        ArrayList<Item> list = new ArrayList<>();
+        ArrayList<Item> loadedList;
+        Item item1 = new Item("iPad", "0123456789", "500");
+        Item item2 = new Item("macbook", "1234567890", "2000");
+        Item item3 = new Item("Apple Pencil", "2345678901", "100");
+        list.add(item1);
+        list.add(item2);
+        list.add(item3);
+        File file = File.createTempFile("tsvTest", ".tsv");
+        newMethods.tsvFormat(list, file);
+        loadedList = newMethods.tsvReader(file);
+        boolean sameData = true;
+        for (int i = 0; i < list.size(); i++) {
+           if (!loadedList.get(i).getName().strip().equals(list.get(i).getName()))
+               sameData = false;
+           else if (!loadedList.get(i).getSerial().strip().equals(list.get(i).getSerial()))
+               sameData = false;
+           else if (!loadedList.get(i).getPrice().strip().equals(list.get(i).getPrice()))
+               sameData = false;
+        }
+        assert(sameData == true);
+        file.delete();
+    }
+
+    @DisplayName("Test HTML Save")
+    @Test
+    void saveHTMLTest() throws IOException {
+        InventoryTrackerTestMethods newMethods = new InventoryTrackerTestMethods();
+        ArrayList<Item> list = new ArrayList<>();
+        Item item1 = new Item("iPad", "0123456789", "500");
+        Item item2 = new Item("macbook", "1234567890", "2000");
+        Item item3 = new Item("Apple Pencil", "2345678901", "100");
+        list.add(item1);
+        list.add(item2);
+        list.add(item3);
+        File file = File.createTempFile("saveHTML", ".html");
+        newMethods.HTMLFormat(list, file);
+        String data = Files.readString(file.toPath());
+        String actual = data;
+        String expected = "<style>\n" +
+                "table, th, td {\n" +
+                "\tborder: 1px solid black;\n" +
+                "\tborder-collapse: collapse;\n" +
+                "}\n" +
+                "th, td {\n" +
+                "\tpadding: 15px;\n" +
+                " text-align: left;\n" +
+                " }\n" +
+                "</style>\n" +
+                "<table style=\"width:100%\">\n" +
+                "<tr>\n" +
+                "\t<th>Price</th>\n" +
+                "\t<th>Serial Number</th>\n" +
+                "\t<th>Name</th>\n" +
+                "</tr>\n" +
+                "<tr>\n" +
+                "\t<td>500</th>\n" +
+                "\t<td>0123456789</th>\n" +
+                "\t<td>iPad</th>\n" +
+                "</tr>\n" +
+                "<tr>\n" +
+                "\t<td>2000</th>\n" +
+                "\t<td>1234567890</th>\n" +
+                "\t<td>macbook</th>\n" +
+                "</tr>\n" +
+                "<tr>\n" +
+                "\t<td>100</th>\n" +
+                "\t<td>2345678901</th>\n" +
+                "\t<td>Apple Pencil</th>\n" +
+                "</tr>\n" +
+                "</table>\n";
+        assertEquals(expected, actual);
+        file.delete();
+    }
+
+    @DisplayName("Test HTML Load")
+    @Test
+    void loadHTMLTest() throws IOException {
+        InventoryTrackerTestMethods newMethods = new InventoryTrackerTestMethods();
+        ArrayList<Item> list = new ArrayList<>();
+        ArrayList<Item> loadedList;
+        Item item1 = new Item("iPad", "0123456789", "500");
+        Item item2 = new Item("macbook", "1234567890", "2000");
+        Item item3 = new Item("Apple Pencil", "2345678901", "100");
+        list.add(item1);
+        list.add(item2);
+        list.add(item3);
+        File file = File.createTempFile("loadHTML", ".html");
+        newMethods.HTMLFormat(list, file);
+        loadedList = newMethods.readHTML(file);
+        boolean sameData = true;
+        for (int i = 0; i < list.size(); i++) {
+            if (!loadedList.get(i).getName().strip().equals(list.get(i).getName()))
+                sameData = false;
+            else if (!loadedList.get(i).getSerial().strip().equals(list.get(i).getSerial()))
+                sameData = false;
+            else if (!loadedList.get(i).getPrice().strip().equals(list.get(i).getPrice()))
+                sameData = false;
+        }
+        assert(sameData == true);
+        file.delete();
+    }
+
+    @DisplayName("Test JSON Save")
+    @Test
+    void saveJSONTest() throws IOException {
+        InventoryTrackerTestMethods newMethods = new InventoryTrackerTestMethods();
+        ArrayList<Item> list = new ArrayList<>();
+        Item item1 = new Item("iPad", "0123456789", "500");
+        Item item2 = new Item("macbook", "1234567890", "2000");
+        list.add(item1);
+        list.add(item2);
+        File file = File.createTempFile("jsonSave", ".json");
+        String jsonString = newMethods.serializeInventory(list);
+        newMethods.saveTexttoFile(jsonString, file);
+        String data = Files.readString(file.toPath());
+        String actual = data;
+        String expected = "{\"Inventory\" : [{\"name\":\"iPad\",\"serial\":\"0123456789\",\"price\":\"500\"},{\"name\":\"macbook\",\"serial\":\"1234567890\",\"price\":\"2000\"}]}";
+        assertEquals(expected, actual);
+        file.delete();
+    }
+
+    @DisplayName("Test JSON Load")
+    @Test
+    void loadJSONTest() throws IOException {
+        InventoryTrackerTestMethods newMethods = new InventoryTrackerTestMethods();
+        ArrayList<Item> list = new ArrayList<>();
+        ArrayList<Item> loadedList;
+        Item item1 = new Item("iPad", "0123456789", "500");
+        Item item2 = new Item("macbook", "1234567890", "2000");
+        list.add(item1);
+        list.add(item2);
+        File file = File.createTempFile("loadJSON", ".json");
+        String jsonString = newMethods.serializeInventory(list);
+        newMethods.saveTexttoFile(jsonString, file);
+        loadedList = newMethods.deserialize(file);
+        boolean sameData = true;
+        for (int i = 0; i < list.size(); i++) {
+            if (!loadedList.get(i).getName().strip().equals(list.get(i).getName()))
+                sameData = false;
+            else if (!loadedList.get(i).getSerial().strip().equals(list.get(i).getSerial()))
+                sameData = false;
+            else if (!loadedList.get(i).getPrice().strip().equals(list.get(i).getPrice()))
+                sameData = false;
+        }
+        assert(sameData == true);
+        file.delete();
+    }
+
+
+
 
 }

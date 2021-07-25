@@ -25,7 +25,7 @@ public class InventoryTrackerMethods {
     public ObservableList<SimpleItem> addItem(String name, String serial, String price, ObservableList<SimpleItem> inventory) {
         SimpleItem newItem = new SimpleItem(name, serial, price);
         if (!checkPrice(price, newItem)) {
-            ErrorMessage.showErrorAlert("Invalid Input", "Please enter a value in US dollars");
+            ErrorMessage.showErrorAlert("Invalid Input", "Please enter a valid monetary price in US dollars");
         } else if (!checkName(name)) {
             ErrorMessage.showErrorAlert("Invalid Input", "Please enter name within 2-256 characters");
         } else if (!checkSerialUnique(serial, inventory)) {
@@ -38,9 +38,12 @@ public class InventoryTrackerMethods {
         return inventory;
     }
 
+    // Valid monetary values, should not be negative
     public Boolean checkPrice(String price, SimpleItem newItem) {
         try {
             newItem.setPrice(price);
+            if (Double.parseDouble(newItem.getPrice()) < 0)
+                return false;
 
         } catch (NumberFormatException e) {
             return false;

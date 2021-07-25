@@ -1,7 +1,8 @@
-## GUI Inventory Tracker Instructions
+##Inventory Tracker 
+###JavaFX, build: Gradle, JUnit testing
 
 ### Storage
-Insert valid item with attributes: price, serial number, and name 
+Insert attributes: price, serial number, and name 
 <br/>
 Inventory designed to store items with valid monetary input, 
 unique alphanumeric serial numbers of length 10, and names between 2-256 characters
@@ -16,5 +17,5 @@ Sort by price, serial number, or name (click attribute -> ascending arrow / desc
 ### Save
 User choice to save inventory in multiple formats (TSV, HTML, JSON)
 ### Load
-User can load inventory from file previously saved
+User can load inventory from file previously saved (TSV, HTML, JSON)
 
