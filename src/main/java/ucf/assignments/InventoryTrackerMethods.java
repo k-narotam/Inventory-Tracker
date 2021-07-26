@@ -22,25 +22,25 @@ public class InventoryTrackerMethods {
 
     // Constraints: Item name between 2 - 256 characters; Serial Number in format XXXXXXXXXX alphanumeric and unique
     // Price valid monetary value
-    public ObservableList<SimpleItem> addItem(String name, String serial, String price, ObservableList<SimpleItem> inventory) {
+    public String addItem(String name, String serial, String price, ObservableList<SimpleItem> inventory) {
         SimpleItem newItem = new SimpleItem(name, serial, price);
+        String result = "";
         if (!checkPrice(price, newItem)) {
-            ErrorMessage.showErrorAlert("Invalid Input", "Please enter a valid monetary price in US dollars");
+            result = "Please enter a valid monetary price in US dollars";
         } else if (!checkName(name)) {
-            ErrorMessage.showErrorAlert("Invalid Input", "Please enter name within 2-256 characters");
+            result = "Please enter name within 2-256 characters";
         } else if (!checkSerialUnique(serial, inventory)) {
-            ErrorMessage.showErrorAlert("Invalid Input", "Please enter a unique serial number");
+            result = "Please enter a unique serial number";
         } else if (!checkSerialFormatting(serial)) {
-            ErrorMessage.showErrorAlert("Invalid Input", "Please enter alphanumeric serial number with 10 characters");
+            result = "Please enter alphanumeric serial number with 10 characters";
         } else {
             inventory.add(newItem);
         }
-        return inventory;
+        return result;
     }
 
-
-
-    // Valid monetary values, should not be negative
+    // Valid monetary values can be parsed into double
+    // Does not allow negative values to be added (when edited, assumes user inputs $ character)
     public Boolean checkPrice(String price, SimpleItem newItem) {
         try {
             newItem.setPrice(price);
@@ -166,8 +166,8 @@ public class InventoryTrackerMethods {
     // JSON files can become serializable with ArrayList, cannot be ObservableList
     public String serializeInventory(ObservableList<SimpleItem> inventory) {
         ArrayList<Item> arrayList = new ArrayList<>();
-        for (SimpleItem simpleItem : inventory) {
-            arrayList.add(new Item(simpleItem.getName(), simpleItem.getSerialNumber(), simpleItem.getPrice()));
+        for (SimpleItem item : inventory) {
+            arrayList.add(new Item(item.getName(), item.getSerialNumber(), item.getPrice()));
         }
         Gson gson = new Gson();
         return gson.toJson(arrayList);

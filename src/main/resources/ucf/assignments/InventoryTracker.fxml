@@ -43,7 +43,7 @@
             <columns>
                 <TableColumn fx:id="priceColumn" onEditCommit="#changePriceCellEvent" prefWidth="114.0" text="Price" />
                 <TableColumn fx:id="serialColumn" onEditCommit="#changeSerialCellEvent" prefWidth="114.0" text="Serial Number" />
-                <TableColumn fx:id="nameColumn" maxWidth="1.7976931348623157E308" onEditCommit="#changeNameCellEvent" prefWidth="371.0" text="Name" />
+                <TableColumn fx:id="nameColumn" maxWidth="1.7976931348623157E308" onEditCommit="#changeNameCellEvent" prefWidth="476.0" text="Name" />
             </columns>
         </TableView>
     </center>

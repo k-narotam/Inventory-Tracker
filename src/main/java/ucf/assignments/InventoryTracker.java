@@ -6,15 +6,12 @@ package ucf.assignments;
 
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
-import javafx.collections.transformation.FilteredList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.control.cell.TextFieldTableCell;
-import javafx.scene.input.InputMethodEvent;
-import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
@@ -53,12 +50,6 @@ public class InventoryTracker implements Initializable {
         tableView.getSelectionModel().setSelectionMode(SelectionMode.SINGLE);
         inventory.addAll(getList());
 
-        //FilteredList<SimpleItem> filteredData = new FilteredList<>(inventory, b-> true);
-
-        //SortedList<SimpleItem> sortedList = new SortedList<>(filteredData);
-        //sortedList.comparatorProperty().bind(tableView.comparatorProperty());
-        //tableView.setItems(sortedList);
-        //tableView.refresh();
     }
 
     // Allows description field to be edited
@@ -86,13 +77,13 @@ public class InventoryTracker implements Initializable {
         tableView.refresh();
     }
 
+    // Allows serial field to be edited - checks against constraints
     @FXML
     public void changeSerialCellEvent(TableColumn.CellEditEvent cell) {
         String serial = cell.getNewValue().toString();
         SimpleItem cellSelected = tableView.getSelectionModel().getSelectedItem();
         boolean format = methods.checkSerialFormatting(serial);
         boolean unique = methods.checkSerialUnique(serial, inventory);
-
 
         if (serial.equals(cell.getOldValue())) {
             cellSelected.setSerialNumber(serial);
@@ -104,7 +95,7 @@ public class InventoryTracker implements Initializable {
             ErrorMessage.showErrorAlert("Invalid Input", "Please enter a unique serial number");
         }
         else{
-            ErrorMessage.showErrorAlert("Invalid Input", "Please enter name within 2-256 characters");
+            ErrorMessage.showErrorAlert("Invalid Input", "Please enter serial with 10 characters");
         }
 
         tableView.refresh();
@@ -114,17 +105,21 @@ public class InventoryTracker implements Initializable {
         return inventory;
     }
 
-
     @FXML
     public void deleteSelectedClicked(ActionEvent actionEvent) {
         SimpleItem selected = tableView.getSelectionModel().getSelectedItem();
         inventory = methods.deleteItem(selected, inventory);
+        tableView.refresh();
     }
 
+    // Adds new item to inventory, if valid input
     @FXML
     public void addNewClicked(ActionEvent actionEvent) {
-        inventory = methods.addItem(nameTextfield.getText(), serialTextField.getText(), priceTextfield.getText(), inventory);
-        tableView.setItems(inventory);
+        String result = methods.addItem(nameTextfield.getText(), serialTextField.getText(), priceTextfield.getText(), inventory);
+        if (!result.equals("")) {
+            ErrorMessage.showErrorAlert("Invalid Input", result);
+        }
+        tableView.refresh();
     }
 
     @FXML
@@ -133,12 +128,12 @@ public class InventoryTracker implements Initializable {
         Stage stage = (Stage)listMenu.getScene().getWindow();
         FileChooser fileChooser = new FileChooser();
         fileChooser.setTitle("Save as TSV");
+        // Extension
         FileChooser.ExtensionFilter extension = new FileChooser.ExtensionFilter("TSV File", "*.txt");
         fileChooser.getExtensionFilters().add(extension);
         File theFile = fileChooser.showSaveDialog(stage);
-        methods.tsvFormat(inventory, theFile);
 
-        // Ensure file extension
+        methods.tsvFormat(inventory, theFile);
     }
 
     @FXML
@@ -147,6 +142,7 @@ public class InventoryTracker implements Initializable {
         Stage stage = (Stage)listMenu.getScene().getWindow();
         FileChooser fileChooser = new FileChooser();
         fileChooser.setTitle("Save as HTML");
+        // Extension
         FileChooser.ExtensionFilter extension = new FileChooser.ExtensionFilter("HTML File", "*.html");
         fileChooser.getExtensionFilters().add(extension);
         File theFile = fileChooser.showSaveDialog(stage);
@@ -181,6 +177,7 @@ public class InventoryTracker implements Initializable {
         FileChooser.ExtensionFilter extension = new FileChooser.ExtensionFilter("TSV File", "*.txt");
         fileChooser.getExtensionFilters().add(extension);
         File theFile = fileChooser.showOpenDialog(stage);
+        // update inventory
         inventory = methods.tsvReader(theFile);
         tableView.setItems(inventory);
         tableView.refresh();
@@ -197,18 +194,17 @@ public class InventoryTracker implements Initializable {
         FileChooser.ExtensionFilter extension = new FileChooser.ExtensionFilter("HTML File", "*.html");
         fileChooser.getExtensionFilters().add(extension);
         File theFile = fileChooser.showOpenDialog(stage);
-
+        // update inventory
         inventory = methods.readHTML(theFile);
         tableView.setItems(inventory);
         tableView.refresh();
-
     }
 
     @FXML
-    public void loadJSON(ActionEvent actionEvent)  {
+    public void loadJSON(ActionEvent actionEvent) {
         // parse function from InventoryTrackerMethods
         // File Chooser
-        Stage stage = (Stage)listMenu.getScene().getWindow();
+        Stage stage = (Stage) listMenu.getScene().getWindow();
         FileChooser fileChooser = new FileChooser();
         fileChooser.setTitle("Load JSON File");
 
@@ -221,22 +217,15 @@ public class InventoryTracker implements Initializable {
         inventory = methods.deserialize(theFile);
         tableView.setItems(inventory);
         tableView.refresh();
-
     }
 
     public void inputtedSearch(KeyEvent keyEvent) {
         ObservableList<SimpleItem> filtered;
         String searched = searchField.getText();
         filtered = methods.searchItem(searched, inventory);
+        // update inventory
         tableView.setItems(filtered);
         tableView.refresh();
     }
 
-    public void updateText(InputMethodEvent inputMethodEvent) {
-        //tableView.refresh();
-       // String searched = searchField.getText();
-        //inventory = methods.searchItem(searched, inventory);
-        //tableView.setItems(inventory);
-        //tableView.refresh();
-    }
 }

@@ -44,22 +44,11 @@ class InventoryTrackerMethods {
     + saveTextToFile()
 }
 
-class InventoryTrackerTestMethods {
-    - inventory : ArrayList
-    - Item
-}
-
 class Item {
-    - name: String
-    - serialNumber: String
-    - value: String
-
-    + getName()
-    + setName()
-    + getSerialNumber()
-    + setSerialNumber()
-    + getValue()
-    + setValue()
+    To be used for  json serialization
+ - name: String
+ - serial: String
+ - value: String
 }
 
 class SimpleItem {
@@ -78,6 +67,7 @@ class SimpleItem {
 javafx.Application <|-- App
 SimpleItem <|- InventoryTrackerMethods
 InventoryTrackerMethods <|-- InventoryTracker
-Item <|-- InventoryTrackerTestMethods
+Item <|-- InventoryTrackerMethods
+ErrorMessage <|-- InventoryTracker
 InventoryTracker <|- javafx.Application
 @enduml

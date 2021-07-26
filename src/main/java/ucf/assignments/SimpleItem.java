@@ -18,7 +18,6 @@ public class SimpleItem {
         this.price = new SimpleStringProperty(price);
     }
 
-
     public String getName() {
         return name.get();
     }
@@ -31,9 +30,6 @@ public class SimpleItem {
         return serial.get();
     }
 
-    public SimpleStringProperty serialNumberProperty() {
-        return serial;
-    }
 
     public void setSerialNumber(String serial) {
         this.serial = new SimpleStringProperty(serial);
