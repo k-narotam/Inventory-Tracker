@@ -1,5 +1,5 @@
-##Inventory Tracker 
-###JavaFX, build: Gradle, JUnit testing
+## Inventory Tracker 
+### JavaFX, build: Gradle, JUnit testing
 
 ### Store Items
 Insert attributes: price, serial number, and name 
