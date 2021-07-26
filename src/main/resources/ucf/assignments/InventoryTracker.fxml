@@ -52,7 +52,7 @@
             <children>
             <VBox prefHeight="53.0" prefWidth="706.0">
                <children>
-                  <TextField fx:id="searchField" prefHeight="26.0" prefWidth="689.0" promptText="Search" />
+                  <TextField fx:id="searchField" onKeyTyped="#inputtedSearch" prefHeight="26.0" prefWidth="689.0" promptText="Search" />
                </children>
                <VBox.margin>
                   <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />

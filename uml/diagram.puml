@@ -1,44 +1,52 @@
 @startuml
 'https://plantuml.com/class-diagram
 
-class InventoryTracker {
+class App {
     start()
     main()
 }
 
-class MainWindowController {
-    items: ItemModel
-    scenes: SceneManager
-    fileManager: FileManager
-    + MainWindowController(ItemModel, SceneManager)
-    + addItem(String, String, BigDecimal)
-    + addItemButtonClicked(EventHandler)
-    + editItemButtonClicked(EventHandler)
-    + removeItemButtonClicked(EventHandler)
+class ErrorMessage {
+    showErrorAlert()
+}
 
+class InventoryTracker {
+    + initialize()
+    + changeNameCellEvent()
+    + changePriceCellEvent()
+    + changeSerialCellEvent()
+    + deleteSelectedClicked()
+    + addNewClicked()
+    + saveTSV()
+    + saveHTML()
+    + saveJSON()
+    + loadTSV()
+    + loadHTML()
+    +loadJSON()
 }
 
 class InventoryTrackerMethods {
-    +addItem()
-    +deleteItem()
-    +edit()
-    +search()
-    +
-
-
+    - inventory : ObservableList
+    - SimpleItem
+    + checkPrice()
+    + checkName()
+    + checkSerialUnique()
+    + checkSerialFormatting()
+    + addItem()
+    + deleteItem()
+    + searchItem()
+    + tsvFormat()
+    + tsvReader()
+    + HTMLFormat()
+    + readHTML()
+    + serializeInventory()
+    + deserialize()
+    + saveTextToFile()
 }
 
-
-class FileManager {
-    saveInventoryasCSV(filename: Strin, data: String)
-    saveInventoryasHTML(filename: String, data: String)
-    saveInventoryasJSON(filename: String, data: String)
-   }
-
-
-
-class ItemModel {
-    - ObservableList<Item>
+class InventoryTrackerTestMethods {
+    - inventory : ArrayList
+    - Item
 }
 
 class Item {
@@ -46,12 +54,12 @@ class Item {
     - serialNumber: String
     - value: String
 
-    +getName()
-    +setName()
-    +getSerialNumber()
-    +setSerialNumber()
-    +getValue()
-    +setValue()
+    + getName()
+    + setName()
+    + getSerialNumber()
+    + setSerialNumber()
+    + getValue()
+    + setValue()
 }
 
 class SimpleItem {
@@ -59,19 +67,17 @@ class SimpleItem {
     - serialNumber: SimpleStringProperty
     - value: SimpleDoubleProperty
 
-    +getName()
-    +setName()
-    +getSerialNumber()
-    +setSerialNumber()
-    +getValue()
-    +setValue()
+    + getName()
+    + setName()
+    + getSerialNumber()
+    + setSerialNumber()
+    + getValue()
+    + setValue()
 }
 
-InventoryTracker -- SceneManager
-javafx.Application <|-- InventoryTracker
-
-MainWindowController o-- ItemModel
-
-MainWindowController o-- FileManager
-ItemModel *-- Item
+javafx.Application <|-- App
+SimpleItem <|- InventoryTrackerMethods
+InventoryTrackerMethods <|-- InventoryTracker
+Item <|-- InventoryTrackerTestMethods
+InventoryTracker <|- javafx.Application
 @enduml

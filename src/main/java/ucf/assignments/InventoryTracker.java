@@ -13,6 +13,9 @@ import javafx.fxml.Initializable;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.control.cell.TextFieldTableCell;
+import javafx.scene.input.InputMethodEvent;
+import javafx.scene.input.KeyCode;
+import javafx.scene.input.KeyEvent;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 
@@ -50,7 +53,7 @@ public class InventoryTracker implements Initializable {
         tableView.getSelectionModel().setSelectionMode(SelectionMode.SINGLE);
         inventory.addAll(getList());
 
-        FilteredList<SimpleItem> filteredData = new FilteredList<>(inventory, b-> true);
+        //FilteredList<SimpleItem> filteredData = new FilteredList<>(inventory, b-> true);
 
         //SortedList<SimpleItem> sortedList = new SortedList<>(filteredData);
         //sortedList.comparatorProperty().bind(tableView.comparatorProperty());
@@ -130,7 +133,7 @@ public class InventoryTracker implements Initializable {
         Stage stage = (Stage)listMenu.getScene().getWindow();
         FileChooser fileChooser = new FileChooser();
         fileChooser.setTitle("Save as TSV");
-        FileChooser.ExtensionFilter extension = new FileChooser.ExtensionFilter("TSV File", "*.tsv");
+        FileChooser.ExtensionFilter extension = new FileChooser.ExtensionFilter("TSV File", "*.txt");
         fileChooser.getExtensionFilters().add(extension);
         File theFile = fileChooser.showSaveDialog(stage);
         methods.tsvFormat(inventory, theFile);
@@ -175,7 +178,7 @@ public class InventoryTracker implements Initializable {
         fileChooser.setTitle("Load TSV File");
 
         // Ensure .json files are highlighted for upload
-        FileChooser.ExtensionFilter extension = new FileChooser.ExtensionFilter("TSV File", "*.tsv");
+        FileChooser.ExtensionFilter extension = new FileChooser.ExtensionFilter("TSV File", "*.txt");
         fileChooser.getExtensionFilters().add(extension);
         File theFile = fileChooser.showOpenDialog(stage);
         inventory = methods.tsvReader(theFile);
@@ -219,5 +222,21 @@ public class InventoryTracker implements Initializable {
         tableView.setItems(inventory);
         tableView.refresh();
 
+    }
+
+    public void inputtedSearch(KeyEvent keyEvent) {
+        ObservableList<SimpleItem> filtered;
+        String searched = searchField.getText();
+        filtered = methods.searchItem(searched, inventory);
+        tableView.setItems(filtered);
+        tableView.refresh();
+    }
+
+    public void updateText(InputMethodEvent inputMethodEvent) {
+        //tableView.refresh();
+       // String searched = searchField.getText();
+        //inventory = methods.searchItem(searched, inventory);
+        //tableView.setItems(inventory);
+        //tableView.refresh();
     }
 }

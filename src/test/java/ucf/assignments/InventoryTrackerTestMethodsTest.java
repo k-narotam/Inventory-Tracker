@@ -18,6 +18,8 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 
 class InventoryTrackerTestMethodsTest {
 
+    // Note: Since tableView allows for sorting, this functionality does not need testing
+
 
     @DisplayName("Simple Test of addItem")
     @Test
@@ -167,7 +169,7 @@ class InventoryTrackerTestMethodsTest {
         inventory.add(item1);
         Item cellSelected = new Item("item2", "XXXXXXXXXX", "3");
         inventory.add(cellSelected);
-        String newPrice = "blah";
+        String newPrice = "dinero";
         assert (!newMethods.checkPrice(newPrice, cellSelected));
 
     }
@@ -200,6 +202,55 @@ class InventoryTrackerTestMethodsTest {
 
     }
 
+    @DisplayName("Test Search - 2 items match")
+    @Test
+    void searchTest() {
+        InventoryTrackerTestMethods newMethods = new InventoryTrackerTestMethods();
+        ArrayList<Item> list = new ArrayList<>();
+        ArrayList<Item> filtered;
+        Item item1 = new Item("Bears", "0123456789", "500");
+        Item item2 = new Item("Beets", "1234567890", "2000");
+        Item item3 = new Item("Battlestar galactica", "2345678901", "100");
+        list.add(item1);
+        list.add(item2);
+        list.add(item3);
+        filtered = newMethods.searchItem("be", list);
+        assert(filtered.size() == 2);
+    }
+
+    @DisplayName("Test Search - 1 item match")
+    @Test
+    void searchTest2() {
+        InventoryTrackerTestMethods newMethods = new InventoryTrackerTestMethods();
+        ArrayList<Item> list = new ArrayList<>();
+        ArrayList<Item> filtered;
+        Item item1 = new Item("Bears", "0123456789", "500");
+        Item item2 = new Item("Beets", "1234567890", "2000");
+        Item item3 = new Item("Battlestar galactica", "2345678901", "100");
+        list.add(item1);
+        list.add(item2);
+        list.add(item3);
+        filtered = newMethods.searchItem("ba", list);
+        assert(filtered.size() == 1);
+    }
+
+    @DisplayName("Test Search - 0 items match")
+    @Test
+    void searchTest3() {
+        InventoryTrackerTestMethods newMethods = new InventoryTrackerTestMethods();
+        ArrayList<Item> list = new ArrayList<>();
+        ArrayList<Item> filtered;
+        Item item1 = new Item("Bears", "0123456789", "500");
+        Item item2 = new Item("Beets", "1234567890", "2000");
+        Item item3 = new Item("Battlestar galactica", "2345678901", "100");
+        list.add(item1);
+        list.add(item2);
+        list.add(item3);
+        filtered = newMethods.searchItem("dwight", list);
+        assert(filtered.size() == 0);
+    }
+
+
     @DisplayName("Test TSV Save")
     @Test
     void saveTSVTest() throws IOException {
@@ -211,13 +262,13 @@ class InventoryTrackerTestMethodsTest {
         list.add(item1);
         list.add(item2);
         list.add(item3);
-        File file = File.createTempFile("tsvTest", ".tsv");
+        File file = File.createTempFile("tsvTest", ".txt");
         newMethods.tsvFormat(list, file);
         String actual = Files.readString(file.toPath());
-        String expected = String.format("%-10s\t%-15s\t%-75s%n", "Price", "Serial Number", "Name");
-        expected += String.format("%-10s\t%-15s\t%-75s%n", item1.getPrice(), item1.getSerial(), item1.getName());
-        expected += String.format("%-10s\t%-15s\t%-75s%n", item2.getPrice(), item2.getSerial(), item2.getName());
-        expected += String.format("%-10s\t%-15s\t%-75s%n", item3.getPrice(), item3.getSerial(), item3.getName());
+        String expected = String.format("%s\t%s\t%s%n", "Price", "Serial Number", "Name");
+        expected += String.format("%s\t%s\t%s%n", item1.getPrice(), item1.getSerial(), item1.getName());
+        expected += String.format("%s\t%s\t%s%n", item2.getPrice(), item2.getSerial(), item2.getName());
+        expected += String.format("%s\t%s\t%s%n", item3.getPrice(), item3.getSerial(), item3.getName());
         assertEquals(expected, actual);
         file.delete();
 
@@ -235,7 +286,7 @@ class InventoryTrackerTestMethodsTest {
         list.add(item1);
         list.add(item2);
         list.add(item3);
-        File file = File.createTempFile("tsvTest", ".tsv");
+        File file = File.createTempFile("tsvTest", ".txt");
         newMethods.tsvFormat(list, file);
         loadedList = newMethods.tsvReader(file);
         boolean sameData = true;

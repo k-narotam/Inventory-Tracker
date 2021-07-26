@@ -38,11 +38,13 @@ public class InventoryTrackerMethods {
         return inventory;
     }
 
+
+
     // Valid monetary values, should not be negative
     public Boolean checkPrice(String price, SimpleItem newItem) {
         try {
             newItem.setPrice(price);
-            if (Double.parseDouble(newItem.getPrice()) < 0)
+            if (Double.parseDouble(newItem.getPrice().substring(1)) < 0)
                 return false;
 
         } catch (NumberFormatException e) {
@@ -50,6 +52,7 @@ public class InventoryTrackerMethods {
         }
         return true;
     }
+
 
     public Boolean checkName(String name) {
         return name.length() >= 2 && name.length() <= 256;
@@ -73,17 +76,23 @@ public class InventoryTrackerMethods {
         return inventory;
     }
 
-    public void searchItem(String text, ObservableList<SimpleItem> inventory) {
-
+    public ObservableList<SimpleItem> searchItem(String search, ObservableList<SimpleItem> inventory) {
+        ObservableList<SimpleItem> filtered = FXCollections.observableArrayList();
+        for (SimpleItem item : inventory) {
+            if (item.getName().toLowerCase().contains(search.toLowerCase()) || item.getSerialNumber().toLowerCase().contains(search.toLowerCase())) {
+                filtered.add(item);
+            }
+        }
+        return filtered;
     }
 
 
     // Print writer used to write to tsv file
     public void tsvFormat(ObservableList<SimpleItem> inventory, File file) throws FileNotFoundException {
         PrintWriter writer = new PrintWriter(file);
-        writer.printf("%-10s\t%-15s\t%-75s%n", "Price", "Serial Number", "Name");
+        writer.printf("%s\t%s\t%s%n", "Price", "Serial Number", "Name");
         for (SimpleItem aItem : inventory) {
-            writer.printf("%-10s\t%-15s\t%-75s%n", aItem.getPrice(), aItem.getSerialNumber(), aItem.getName());
+            writer.printf("%s\t%s\t%s%n", aItem.getPrice(), aItem.getSerialNumber(), aItem.getName());
         }
         writer.close();
     }

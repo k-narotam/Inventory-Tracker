@@ -6,6 +6,8 @@
 package ucf.assignments;
 
 import com.google.gson.*;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
@@ -73,11 +75,21 @@ public class InventoryTrackerTestMethods {
         return inventory;
     }
 
+    public ArrayList<Item> searchItem(String search, ArrayList<Item> inventory) {
+        ArrayList<Item> filtered = new ArrayList<>();
+        for (Item item : inventory) {
+            if (item.getName().toLowerCase().contains(search.toLowerCase()) || item.getSerial().toLowerCase().contains(search.toLowerCase())) {
+                filtered.add(item);
+            }
+        }
+        return filtered;
+    }
+
     public void tsvFormat(ArrayList<Item> inventory, File file) throws FileNotFoundException {
         PrintWriter writer = new PrintWriter(file);
-        writer.printf("%-10s\t%-15s\t%-75s%n", "Price", "Serial Number", "Name");
+        writer.printf("%s\t%s\t%s%n", "Price", "Serial Number", "Name");
         for (Item aItem : inventory) {
-            writer.printf("%-10s\t%-15s\t%-75s%n", aItem.getPrice(), aItem.getSerial(), aItem.getName());
+            writer.printf("%s\t%s\t%s%n", aItem.getPrice(), aItem.getSerial(), aItem.getName());
         }
         writer.close();
     }
@@ -145,12 +157,8 @@ public class InventoryTrackerTestMethods {
     }
 
     public String serializeInventory(ArrayList<Item> inventory) {
-        ArrayList<Item> arrayList = new ArrayList<>();
-        for (Item item : inventory) {
-            arrayList.add(new Item(item.getName(), item.getSerial(), item.getPrice()));
-        }
         Gson gson = new Gson();
-        return gson.toJson(arrayList);
+        return gson.toJson(inventory);
     }
 
     public void saveTexttoFile(String content, File file) throws FileNotFoundException {
